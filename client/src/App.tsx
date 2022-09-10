@@ -1,12 +1,14 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Header from "./components/Header";
 
 const App = () => {
 	return (
 		<BrowserRouter>
-			<div className=''>
-				Hello Word
-				<Routes></Routes>
-			</div>
+			<Header />
+			<main className="container mx-auto">
+				<h1>Welcome to Storeex</h1>
+			</main>
+			<Routes></Routes>
 		</BrowserRouter>
 	);
 };
