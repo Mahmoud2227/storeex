@@ -10,12 +10,12 @@ const Product: React.FC = () => {
 
 	React.useEffect(() => {
 		const fetchProduct = async () => {
-			const response = await fetch(`http://localhost:5000/api/products/${id}`);
+			const response = await fetch(`/api/products/${id}`);
 			const data = await response.json();
 			setProduct(data);
 		};
 		fetchProduct();
-	});
+	}, [id]);
 
 	return (
 		<>
