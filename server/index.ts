@@ -1,7 +1,10 @@
 import express from "express";
+import cors from "cors";
 import products from "./DummyProducts";
 
 const app = express();
+
+app.use(cors());
 
 app.get("/api/products", (req, res) => {
 	res.json(products);

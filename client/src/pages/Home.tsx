@@ -1,8 +1,18 @@
 import React from "react";
 import Product from "../components/product/Product";
-import products from "../DummyProducts";
+import ProductType from "../types/product";
 
 const Home = () => {
+	const [products, setProducts] = React.useState<ProductType[]>([]);
+
+	React.useEffect(() => {
+		const fetchProducts = async () => {
+			const response = await fetch("http://localhost:5000/api/products");
+			const data = await response.json();
+			setProducts(data);
+		};
+		fetchProducts();
+	}, []);
 	return (
 		<>
 			<h1 className='text-3xl font-semibold'>Latest Products</h1>

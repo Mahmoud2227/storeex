@@ -1,11 +1,22 @@
 import React from "react";
 import {Link, useParams} from "react-router-dom";
 import Rating from "../components/UI/Rating";
-import products from "../DummyProducts";
+
+import ProductType from "../types/product";
 
 const Product: React.FC = () => {
+	const [product, setProduct] = React.useState<ProductType | null>(null);
 	const {id} = useParams<{id: string}>();
-	const product = products.find((p) => p._id.toString() === id);
+
+	React.useEffect(() => {
+		const fetchProduct = async () => {
+			const response = await fetch(`http://localhost:5000/api/products/${id}`);
+			const data = await response.json();
+			setProduct(data);
+		};
+		fetchProduct();
+	});
+
 	return (
 		<>
 			<Link to='/' className='block w-fit mb-4 p-4 font-medium hover:bg-slate-300'>
@@ -13,7 +24,7 @@ const Product: React.FC = () => {
 			</Link>
 			{product && (
 				<div className='flex justify-center gap-8 flex-wrap'>
-					<div className="min-w-[250px] flex-1">
+					<div className='min-w-[250px] flex-1'>
 						<img src={product?.image} alt={product?.name} />
 					</div>
 					<div className='flex-1 min-w-[300px]'>
