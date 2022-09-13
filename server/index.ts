@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import chalk from "chalk";
 import connectDB from "./config/db";
-import products from "./DummyProducts";
+import products from "./data/DummyProducts";
 
 dotenv.config();
 connectDB();
@@ -17,8 +17,8 @@ app.get("/api/products", (req, res) => {
 });
 
 app.get("/api/products/:id", (req, res) => {
-	const product = products.find((product) => product._id.toString() === req.params.id);
-	res.json(product);
+	// const product = products.find((product) => product._id.toString() === req.params.id);
+	// res.json(product);
 });
 
 const PORT = process.env.PORT || 5000;
