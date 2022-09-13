@@ -1,5 +1,4 @@
 import express from "express";
-import chalk from "chalk";
 import asyncHandler from "express-async-handler";
 import Product from "../models/Product";
 
@@ -20,7 +19,8 @@ router.get(
 		if (product) {
 			res.json(product);
 		} else {
-			res.status(404).json({message: "Product not found"});
+			res.status(404)
+      throw new Error("Product not found");
 		}
 	})
 );
