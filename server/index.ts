@@ -3,7 +3,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import chalk from "chalk";
 import connectDB from "./config/db";
-import products from "./data/DummyProducts";
+
+import productRoutes from "./routes/product";
+
 
 dotenv.config();
 connectDB();
@@ -11,15 +13,9 @@ connectDB();
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
-app.get("/api/products", (req, res) => {
-	res.json(products);
-});
-
-app.get("/api/products/:id", (req, res) => {
-	// const product = products.find((product) => product._id.toString() === req.params.id);
-	// res.json(product);
-});
+app.use("/api/products", productRoutes);
 
 const PORT = process.env.PORT || 5000;
 
