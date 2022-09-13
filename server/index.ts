@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import chalk from "chalk";
 import connectDB from "./config/db";
 import products from "./DummyProducts";
 
@@ -22,4 +23,4 @@ app.get("/api/products/:id", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server started in ${process.env.NODE_ENV} mode on port ${PORT}` ));
+app.listen(PORT, () => console.log(chalk.blue.bold(`Server started in ${process.env.NODE_ENV} mode on port ${PORT}`) ));
