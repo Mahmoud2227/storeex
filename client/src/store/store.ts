@@ -1,11 +1,13 @@
 import {configureStore} from "@reduxjs/toolkit";
 import productsReducer from "./slices/products";
 import productDetailsReducer from "./slices/productDetails";
+import cartReducer from "./slices/cart";
 
 export const store = configureStore({
 	reducer: {
 		products: productsReducer,
 		productDetails: productDetailsReducer,
+		cart: cartReducer,
 	},
 	devTools: process.env.NODE_ENV !== "production",
 });

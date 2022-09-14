@@ -2,6 +2,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import Cart from "./pages/Cart";
 
 import Home from "./pages/Home";
 import Product from "./pages/Product";
@@ -14,6 +15,10 @@ const App = () => {
 				<Routes>
 					<Route path='/' element={<Home />} />
 					<Route path='/product/:id' element={<Product />} />
+					<Route path='/cart'>
+						<Route index element={<Cart />} />
+						<Route path=':id' element={<Cart />} />
+					</Route>
 				</Routes>
 			</main>
 			<Footer />

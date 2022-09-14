@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, Dispatch} from "@reduxjs/toolkit";
 import type {PayloadAction} from "@reduxjs/toolkit";
 import Product from "../../types/product";
 
@@ -34,7 +34,7 @@ export const productDetailsSlice = createSlice({
 	},
 });
 
-export const fetchProductDetails = (id: string) => async (dispatch: any) => {
+export const fetchProductDetails = (id: string) => async (dispatch: Dispatch) => {
 	try {
 		dispatch(productDetailsRequest());
 		const res = await fetch("/api/products/" + id);
