@@ -1,5 +1,7 @@
 import React from "react";
 import Product from "../components/product/Product";
+import Message from "../components/UI/Message";
+import Spinner from "../components/UI/Spinner";
 
 import {useAppDispatch, useAppSelector} from "../hooks/RTK";
 import {fetchProducts} from "../store/slices/product";
@@ -15,9 +17,9 @@ const Home = () => {
 		<>
 			<h1 className='text-3xl font-semibold'>Latest Products</h1>
 			{loading ? (
-				<h2>Loading...</h2>
+				<Spinner />
 			) : error ? (
-				<h2>{error}</h2>
+				<Message text={error} />
 			) : (
 				<div className='grid grid-cols-12 gap-y-8 sm:gap-8 my-4'>
 					{products.map((product) => (

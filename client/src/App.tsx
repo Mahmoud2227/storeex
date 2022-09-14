@@ -10,7 +10,7 @@ const App = () => {
 	return (
 		<BrowserRouter>
 			<Header />
-			<main className='container mx-auto min-h-[80vh] p-6'>
+			<main className='container flex flex-col mx-auto min-h-[80vh] p-6'>
 				<Routes>
 					<Route path='/' element={<Home />} />
 					<Route path='/product/:id' element={<Product />} />
