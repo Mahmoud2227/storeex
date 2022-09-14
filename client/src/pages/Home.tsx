@@ -19,7 +19,9 @@ const Home = () => {
 			{loading ? (
 				<Spinner />
 			) : error ? (
-				<Message text={error} />
+				<Message color="red" >
+					{error}
+				</Message>
 			) : (
 				<div className='grid grid-cols-12 gap-y-8 sm:gap-8 my-4'>
 					{products.map((product) => (

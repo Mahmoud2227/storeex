@@ -20,6 +20,7 @@ const Cart = () => {
       {
         cartItems.map(el => <div key={el.product}>{el.name} - {el.qty}</div>)
       }
+      <Message color="blue">Wow that's cool</Message>
     </div>
 	);
 };

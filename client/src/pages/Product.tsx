@@ -1,5 +1,5 @@
 import {useState, useEffect, FC} from "react";
-import {Link, useParams,useNavigate} from "react-router-dom";
+import {Link, useParams, useNavigate} from "react-router-dom";
 import Rating from "../components/UI/Rating";
 import Spinner from "../components/UI/Spinner";
 import Message from "../components/UI/Message";
@@ -19,7 +19,7 @@ const Product: FC = () => {
 
 	const addToCartHandler = () => {
 		navigate(`/cart/${id}?qty=${qty}`);
-	}
+	};
 
 	return (
 		<>
@@ -29,7 +29,7 @@ const Product: FC = () => {
 			{loading ? (
 				<Spinner />
 			) : error ? (
-				<Message text={error} />
+				<Message color='red'>{error}</Message>
 			) : (
 				<div className='flex justify-center gap-8 flex-wrap'>
 					<div className='min-w-[250px] flex-1'>
@@ -62,9 +62,9 @@ const Product: FC = () => {
 						{productDetails?.countInStock! > 0 && (
 							<div className='flex justify-between py-3 px-5 border-b-2'>
 								<label htmlFor='qty'>Qty</label>
-								<select className='bg-slate-100 p-2' onChange={(e)=>setQty(+e.target.value)}>
+								<select className='bg-slate-100 p-2' onChange={(e) => setQty(+e.target.value)}>
 									{Array.from(Array(productDetails?.countInStock!).keys()).map((x) => (
-										<option key={x} value={x+1}>
+										<option key={x} value={x + 1}>
 											{x + 1}
 										</option>
 									))}
