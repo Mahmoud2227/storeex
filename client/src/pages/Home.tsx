@@ -1,28 +1,34 @@
 import React from "react";
 import Product from "../components/product/Product";
-import ProductType from "../types/product";
+
+import {useAppDispatch, useAppSelector} from "../hooks/RTK";
+import {fetchProducts} from "../store/slices/product";
 
 const Home = () => {
-	const [products, setProducts] = React.useState<ProductType[]>([]);
+	const {products, error, loading} = useAppSelector((state) => state.products);
 
+	const dispatch = useAppDispatch();
 	React.useEffect(() => {
-		const fetchProducts = async () => {
-			const response = await fetch("/api/products");
-			const data = await response.json();
-			setProducts(data);
-		};
-		fetchProducts();
-	}, []);
+		dispatch(fetchProducts());
+	}, [dispatch]);
 	return (
 		<>
 			<h1 className='text-3xl font-semibold'>Latest Products</h1>
-			<div className='grid grid-cols-12 gap-y-8 sm:gap-8 my-4'>
-				{products.map((product) => (
-					<div key={product._id} className='col-span-12 sm:col-span-6 lg:col-span-4 xl:col-span-3'>
-						<Product product={product} />
-					</div>
-				))}
-			</div>
+			{loading ? (
+				<h2>Loading...</h2>
+			) : error ? (
+				<h2>{error}</h2>
+			) : (
+				<div className='grid grid-cols-12 gap-y-8 sm:gap-8 my-4'>
+					{products.map((product) => (
+						<div
+							key={product._id}
+							className='col-span-12 sm:col-span-6 lg:col-span-4 xl:col-span-3'>
+							<Product product={product} />
+						</div>
+					))}
+				</div>
+			)}
 		</>
 	);
 };
