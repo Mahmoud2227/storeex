@@ -4,7 +4,7 @@ import Message from "../components/UI/Message";
 import Spinner from "../components/UI/Spinner";
 
 import {useAppDispatch, useAppSelector} from "../hooks/RTK";
-import {fetchProducts} from "../store/slices/product";
+import {fetchProducts} from "../store/slices/products";
 
 const Home = () => {
 	const {products, error, loading} = useAppSelector((state) => state.products);
