@@ -2,7 +2,7 @@ import {useEffect} from "react";
 import {Link, useParams, useSearchParams} from "react-router-dom";
 import {AiFillDelete} from "react-icons/ai";
 import {useAppDispatch, useAppSelector} from "../hooks/RTK";
-import {addProductToCart} from "../store/slices/cart";
+import {addProductToCart, removeProductFromCart} from "../store/slices/cart";
 import Message from "../components/UI/Message";
 
 const Cart = () => {
@@ -18,7 +18,7 @@ const Cart = () => {
 	}, [dispatch, id, qty]);
 
 	const removeFromCartHandler = (id: string) => {
-		console.log(id);
+		dispatch(removeProductFromCart(id));
 	};
 
 	const onCheckoutHandler = () => {

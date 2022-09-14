@@ -38,6 +38,9 @@ export const cartSlice = createSlice({
 				state.cartItems = [...state.cartItems, item];
 			}
 		},
+		removeFromCart: (state, action: PayloadAction<string>) => {
+			state.cartItems = state.cartItems.filter((x) => x.product !== action.payload);
+		},
 	},
 });
 
@@ -67,6 +70,12 @@ export const addProductToCart =
 		}
 	};
 
-export const {addToCart} = cartSlice.actions;
+export const removeProductFromCart =
+	(id: string) => (dispatch: Dispatch, getState: () => RootState) => {
+		dispatch(removeFromCart(id));
+		localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
+	};
+
+export const {addToCart, removeFromCart} = cartSlice.actions;
 
 export default cartSlice.reducer;
