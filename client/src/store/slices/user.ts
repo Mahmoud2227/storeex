@@ -8,7 +8,6 @@ interface UserState {
 	error: string | null;
 }
 
-
 const localStorageUserInfo = localStorage.getItem("userInfo")
 	? JSON.parse(localStorage.getItem("userInfo")!)
 	: null;
@@ -36,7 +35,7 @@ export const userSlice = createSlice({
 			state.loading = false;
 			state.error = action.payload;
 		},
-		logout: (state) => {
+		userLogout: (state) => {
 			state.user = null;
 		},
 	},
@@ -50,15 +49,15 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				body: JSON.stringify({email, password}),
 			},
+			body: JSON.stringify({email, password}),
 		});
 		const data = await res.json();
 		if (!res.ok) {
 			throw new Error(data.message);
 		}
-    dispatch(loginSuccess(data));
-    localStorage.setItem("userInfo", JSON.stringify(data));
+		dispatch(loginSuccess(data));
+		localStorage.setItem("userInfo", JSON.stringify(data));
 	} catch (error) {
 		if (error instanceof Error) {
 			dispatch(loginFail(error.message));
@@ -66,6 +65,11 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
 	}
 };
 
-export const {loginFail, loginRequest, loginSuccess, logout} = userSlice.actions;
+export const logout = () => (dispatch: Dispatch) => {
+	localStorage.removeItem("userInfo");
+	dispatch(userLogout());
+};
+
+export const {loginFail, loginRequest, loginSuccess, userLogout} = userSlice.actions;
 
 export default userSlice.reducer;
