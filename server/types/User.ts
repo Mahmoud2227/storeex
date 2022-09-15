@@ -1,8 +1,9 @@
 interface IUser {
-  name: string;
-  email: string;
-  password: string;
-  isAdmin: boolean;
+	name: string;
+	email: string;
+	password: string;
+	isAdmin: boolean;
+	matchPassword: (enteredPassword: string) => Promise<boolean>;
 }
 
 export default IUser;
