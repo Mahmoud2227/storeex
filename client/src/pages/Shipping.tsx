@@ -1,5 +1,6 @@
 import {useState} from "react";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import CheckoutSteps from "../components/UI/CheckoutSteps";
 import {useAppDispatch, useAppSelector} from "../hooks/RTK";
 import {saveShippingAddress} from "../store/slices/cart";
 
@@ -14,7 +15,7 @@ const Shipping = () => {
 		country: shippingAddress?.country || "",
 	});
 
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
 	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setForm({...form, [e.target.name]: e.target.value});
@@ -23,11 +24,12 @@ const Shipping = () => {
 	const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		dispatch(saveShippingAddress(form));
-    navigate("/payment");
+		navigate("/payment");
 	};
 
 	return (
 		<div className='self-center max-w-xl w-full'>
+			<CheckoutSteps step1 step2 />
 			<h1 className='text-3xl font-semibold tracking-wider mb-4'>Shipping</h1>
 			<form onSubmit={submitHandler}>
 				<div>
