@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
+import Shipping from "./pages/Shipping";
 
 const App = () => {
 	return (
@@ -25,6 +26,7 @@ const App = () => {
 						<Route index element={<Cart />} />
 						<Route path=':id' element={<Cart />} />
 					</Route>
+					<Route path='/shipping' element={<Shipping />} />
 				</Routes>
 			</main>
 			<Footer />

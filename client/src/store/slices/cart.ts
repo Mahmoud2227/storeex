@@ -11,17 +11,30 @@ interface Item {
 	qty: number;
 }
 
+interface ShippingAddress {
+	address: string;
+	city: string;
+	postalCode: string;
+	country: string;
+}
+
 interface CartState {
 	cartItems: Item[];
+	shippingAddress: ShippingAddress | null;
 }
 
 const localStorageCartItems = localStorage.getItem("cartItems")
 	? JSON.parse(localStorage.getItem("cartItems")!)
 	: [];
 
+const localStorageShippingAddress = localStorage.getItem("shippingAddress")
+	? JSON.parse(localStorage.getItem("shippingAddress")!)
+	: null;
+
 // Define the initial state using that type
 const initialState: CartState = {
 	cartItems: localStorageCartItems,
+	shippingAddress: localStorageShippingAddress,
 };
 
 export const cartSlice = createSlice({
@@ -40,6 +53,9 @@ export const cartSlice = createSlice({
 		},
 		removeFromCart: (state, action: PayloadAction<string>) => {
 			state.cartItems = state.cartItems.filter((x) => x.product !== action.payload);
+		},
+		saveAddress: (state, action: PayloadAction<ShippingAddress>) => {
+			state.shippingAddress = action.payload;
 		},
 	},
 });
@@ -76,6 +92,11 @@ export const removeProductFromCart =
 		localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
 	};
 
-export const {addToCart, removeFromCart} = cartSlice.actions;
+export const saveShippingAddress = (data: ShippingAddress) => (dispatch: Dispatch) => {
+	dispatch(saveAddress(data));
+	localStorage.setItem("shippingAddress", JSON.stringify(data));
+};
+
+export const {addToCart, removeFromCart, saveAddress} = cartSlice.actions;
 
 export default cartSlice.reducer;

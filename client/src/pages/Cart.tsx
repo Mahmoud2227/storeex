@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import {Link, useParams, useSearchParams} from "react-router-dom";
+import {Link, useParams, useSearchParams,useNavigate} from "react-router-dom";
 import {AiFillDelete} from "react-icons/ai";
 import {useAppDispatch, useAppSelector} from "../hooks/RTK";
 import {addProductToCart, removeProductFromCart} from "../store/slices/cart";
@@ -8,9 +8,13 @@ import Message from "../components/UI/Message";
 const Cart = () => {
 	const {id} = useParams<{id: string}>();
 	const [searchParams] = useSearchParams();
+	const qty = searchParams.get("qty") || 1;
+
 	const dispatch = useAppDispatch();
 	const cartItems = useAppSelector((state) => state.cart.cartItems);
-	const qty = searchParams.get("qty") || 1;
+	
+	const navigate = useNavigate();
+	
 	useEffect(() => {
 		if (id) {
 			dispatch(addProductToCart(id, +qty));
@@ -22,7 +26,7 @@ const Cart = () => {
 	};
 
 	const onCheckoutHandler = () => {
-		console.log("checkout");
+		navigate("/login?redirect=shipping");
 	};
 	return (
 		<>
@@ -77,8 +81,9 @@ const Cart = () => {
 					</p>
 					<button
 						type='button'
-						className='w-full py-3 bg-slate-700 text-white font-medium tracking-wide'
-						onClick={onCheckoutHandler}>
+						className='w-full py-3 bg-slate-700 text-white font-medium tracking-wide disabled:bg-opacity-70 disabled:cursor-not-allowed'
+						onClick={onCheckoutHandler}
+						disabled={cartItems.length === 0}>
 						Proceed To Checkout
 					</button>
 				</div>

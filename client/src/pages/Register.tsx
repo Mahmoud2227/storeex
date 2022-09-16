@@ -31,7 +31,7 @@ const Register = () => {
 
 	useEffect(() => {
 		if (user) {
-			navigate(redirect || "/");
+			navigate(`/${redirect}` || "/");
 		}
 	}, [user, navigate, redirect]);
 

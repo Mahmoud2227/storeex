@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
-import {Link, useSearchParams,useNavigate} from "react-router-dom";
+import {Link, useSearchParams, useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../hooks/RTK";
-import { login } from "../store/slices/user/actions";
+import {login} from "../store/slices/user/actions";
 import Spinner from "../components/UI/Spinner";
 import Message from "../components/UI/Message";
 
@@ -12,16 +12,17 @@ const Login = () => {
 	const [searchParams] = useSearchParams();
 	const redirect = searchParams.get("redirect");
 
-  const dispatch = useAppDispatch();
-  const {loading, error, user} = useAppSelector(state => state.user);
+	const dispatch = useAppDispatch();
+	const {loading, error, user} = useAppSelector((state) => state.user);
 
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user) {
-      navigate(redirect || "/");
-    }
-  },[user, navigate, redirect]);
+	useEffect(() => {
+		if (user) {
+			navigate(`/${redirect}` || "/");
+		}
+	}, [user, navigate, redirect]);
+
 	const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		dispatch(login(email, password));
@@ -31,8 +32,8 @@ const Login = () => {
 		<div className='self-center max-w-xl w-full'>
 			<h1 className='text-3xl font-semibold tracking-wider mb-4'>SIGN IN</h1>
 			{error && <Message color='red'>{error}</Message>}
-      {loading && <Spinner />}
-      <form onSubmit={submitHandler}>
+			{loading && <Spinner />}
+			<form onSubmit={submitHandler}>
 				<div>
 					<label htmlFor='email' className='font-medium'>
 						Email Address
@@ -63,7 +64,7 @@ const Login = () => {
 					SIGN IN
 				</button>
 			</form>
-			<p className="mt-4">
+			<p className='mt-4'>
 				New Customer?{" "}
 				<Link
 					to={redirect ? `/register?redirect=${redirect}` : "/register"}
