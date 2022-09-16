@@ -27,10 +27,10 @@ const Cart = () => {
 	return (
 		<>
 			<h1 className='text-3xl font-semibold mb-4'>SHOPPING CART</h1>
-			{cartItems.length === 0 ? (
-				<Message color='blue'>Your Cart Is Empty!</Message>
-			) : (
-				<div className='flex flex-col lg:flex-row justify-between items-center lg:items-start gap-4'>
+			<div className='flex flex-col lg:flex-row justify-between items-center lg:items-start gap-4'>
+				{cartItems.length === 0 ? (
+					<Message color='blue'>Your Cart Is Empty!</Message>
+				) : (
 					<div className='flex-1 max-w-5xl'>
 						{cartItems.map((item) => (
 							<div key={item.product} className='grid grid-cols-12 p-4 border-b-2'>
@@ -64,26 +64,25 @@ const Cart = () => {
 										<AiFillDelete className='text-2xl text-red-500' />
 									</span>
 								</div>
-								<div></div>
 							</div>
 						))}
 					</div>
-					<div className='w-full max-w-lg lg:max-w-xs h-fit p-4 border-2'>
-						<h2 className='text-2xl tracking-wide font-medium'>
-							SUBTOTAL ({cartItems.reduce((acc, item) => acc + item.qty, 0)}) ITEMS
-						</h2>
-						<p className='font-medium my-4'>
-							${cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)}
-						</p>
-						<button
-							type='button'
-							className='w-full py-3 bg-slate-700 text-white font-medium tracking-wide'
-							onClick={onCheckoutHandler}>
-							Proceed To Checkout
-						</button>
-					</div>
+				)}
+				<div className='w-full max-w-lg lg:max-w-xs h-fit p-4 border-2'>
+					<h2 className='text-2xl tracking-wide font-medium'>
+						SUBTOTAL ({cartItems.reduce((acc, item) => acc + item.qty, 0)}) ITEMS
+					</h2>
+					<p className='font-medium my-4'>
+						${cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)}
+					</p>
+					<button
+						type='button'
+						className='w-full py-3 bg-slate-700 text-white font-medium tracking-wide'
+						onClick={onCheckoutHandler}>
+						Proceed To Checkout
+					</button>
 				</div>
-			)}
+			</div>
 		</>
 	);
 };
