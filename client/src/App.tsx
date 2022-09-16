@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 
@@ -18,6 +19,7 @@ const App = () => {
 					<Route path='/login' element={<Login />} />
 					<Route path='/register' element={<Register />} />
 					<Route path='/' element={<Home />} />
+					<Route path='/profile' element={<Profile />} />
 					<Route path='/product/:id' element={<Product />} />
 					<Route path='/cart'>
 						<Route index element={<Cart />} />

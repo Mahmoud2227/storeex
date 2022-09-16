@@ -2,7 +2,7 @@ import React from "react";
 import {Link} from "react-router-dom";
 import {HiShoppingCart, HiUser} from "react-icons/hi";
 import {useAppDispatch, useAppSelector} from "../hooks/RTK";
-import {logout} from "../store/slices/user";
+import {logout} from "../store/slices/user/actions";
 import DropDown from "./UI/DropDown";
 
 const Header = () => {
@@ -11,8 +11,8 @@ const Header = () => {
 
 	const logoutHandler = () => {
 		dispatch(logout());
-	}
-	
+	};
+
 	return (
 		<header className='w-full p-6 bg-slate-800'>
 			<nav className='container mx-auto flex justify-between items-center'>
@@ -27,10 +27,14 @@ const Header = () => {
 						</Link>
 					</li>
 					<li className='hover:text-slate-100 flex'>
-						{user? <DropDown name={user.name} Logout={logoutHandler}/> : <Link to='/login' className='flex gap-1 items-center'>
-							<HiUser />
-							SIGN IN
-						</Link>}
+						{user ? (
+							<DropDown name={user.name} Logout={logoutHandler} />
+						) : (
+							<Link to='/login' className='flex gap-1 items-center'>
+								<HiUser />
+								SIGN IN
+							</Link>
+						)}
 					</li>
 				</ul>
 			</nav>

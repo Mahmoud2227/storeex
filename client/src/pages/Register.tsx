@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import {Link, useSearchParams, useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../hooks/RTK";
-import {register} from "../store/slices/user";
+import {register} from "../store/slices/user/actions";
 import Spinner from "../components/UI/Spinner";
 import Message from "../components/UI/Message";
 

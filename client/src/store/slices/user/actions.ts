@@ -1,46 +1,5 @@
-import {createSlice, Dispatch} from "@reduxjs/toolkit";
-import type {PayloadAction} from "@reduxjs/toolkit";
-import User from "../../types/user";
-
-interface UserState {
-	user: User | null;
-	loading: boolean;
-	error: string | null;
-}
-
-const localStorageUserInfo = localStorage.getItem("userInfo")
-	? JSON.parse(localStorage.getItem("userInfo")!)
-	: null;
-
-// Define the initial state using that type
-const initialState: UserState = {
-	user: localStorageUserInfo,
-	loading: false,
-	error: null,
-};
-
-export const userSlice = createSlice({
-	name: "user",
-	// `createSlice` will infer the state type from the `initialState` argument
-	initialState,
-	reducers: {
-		requestStart: (state) => {
-			state.loading = true;
-		},
-		requestSuccess: (state, action: PayloadAction<User>) => {
-			state.loading = false;
-			state.user = action.payload;
-			state.error = null;
-		},
-		requestFail: (state, action: PayloadAction<string>) => {
-			state.loading = false;
-			state.error = action.payload;
-		},
-		userLogout: (state) => {
-			state.user = null;
-		},
-	},
-});
+import {Dispatch} from "@reduxjs/toolkit";
+import {requestStart, requestFail, requestSuccess, userLogout} from "./user";
 
 export const login = (email: string, password: string) => async (dispatch: Dispatch) => {
 	try {
@@ -91,11 +50,57 @@ export const register =
 		}
 	};
 
+export const getUserDetails = (id: string) => async (dispatch: Dispatch, getState: any) => {
+	try {
+		dispatch(requestStart());
+
+		const user = getState().user.user;
+		const res = await fetch("/api/users/" + id, {
+			method: "GET",
+			headers: {
+				Authorization: `Bearer ${user.token}`,
+			},
+		});
+		const data = await res.json();
+		if (!res.ok) {
+			throw new Error(data.message);
+		}
+		dispatch(requestSuccess({...data, token: user.token}));
+	} catch (error) {
+		if (error instanceof Error) {
+			dispatch(requestFail(error.message));
+		}
+	}
+};
+
+export const updateProfile = (user: any) => async (dispatch: Dispatch, getState: any) => {
+	try {
+		dispatch(requestStart());
+
+		const token = getState().user.user.token;
+
+		const res = await fetch("/api/users/profile", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify(user),
+		});
+		const data = await res.json();
+		if (!res.ok) {
+			throw new Error(data.message);
+		}
+		dispatch(requestSuccess(data));
+		localStorage.setItem("userInfo", JSON.stringify(data));
+	} catch (error) {
+		if (error instanceof Error) {
+			dispatch(requestFail(error.message));
+		}
+	}
+};
+
 export const logout = () => (dispatch: Dispatch) => {
 	localStorage.removeItem("userInfo");
 	dispatch(userLogout());
 };
-
-export const {requestStart, requestSuccess, requestFail, userLogout} = userSlice.actions;
-
-export default userSlice.reducer;
