@@ -24,14 +24,15 @@ export const userSlice = createSlice({
 	// `createSlice` will infer the state type from the `initialState` argument
 	initialState,
 	reducers: {
-		loginRequest: (state) => {
+		requestStart: (state) => {
 			state.loading = true;
 		},
-		loginSuccess: (state, action: PayloadAction<User>) => {
+		requestSuccess: (state, action: PayloadAction<User>) => {
 			state.loading = false;
 			state.user = action.payload;
+			state.error = null;
 		},
-		loginFail: (state, action: PayloadAction<string>) => {
+		requestFail: (state, action: PayloadAction<string>) => {
 			state.loading = false;
 			state.error = action.payload;
 		},
@@ -43,7 +44,7 @@ export const userSlice = createSlice({
 
 export const login = (email: string, password: string) => async (dispatch: Dispatch) => {
 	try {
-		dispatch(loginRequest());
+		dispatch(requestStart());
 
 		const res = await fetch("/api/users/login", {
 			method: "POST",
@@ -56,20 +57,45 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
 		if (!res.ok) {
 			throw new Error(data.message);
 		}
-		dispatch(loginSuccess(data));
+		dispatch(requestSuccess(data));
 		localStorage.setItem("userInfo", JSON.stringify(data));
 	} catch (error) {
 		if (error instanceof Error) {
-			dispatch(loginFail(error.message));
+			dispatch(requestFail(error.message));
 		}
 	}
 };
+
+export const register =
+	(name: string, email: string, password: string) => async (dispatch: Dispatch) => {
+		try {
+			dispatch(requestStart());
+
+			const res = await fetch("/api/users", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({name, email, password}),
+			});
+			const data = await res.json();
+			if (!res.ok) {
+				throw new Error(data.message);
+			}
+			dispatch(requestSuccess(data));
+			localStorage.setItem("userInfo", JSON.stringify(data));
+		} catch (error) {
+			if (error instanceof Error) {
+				dispatch(requestFail(error.message));
+			}
+		}
+	};
 
 export const logout = () => (dispatch: Dispatch) => {
 	localStorage.removeItem("userInfo");
 	dispatch(userLogout());
 };
 
-export const {loginFail, loginRequest, loginSuccess, userLogout} = userSlice.actions;
+export const {requestStart, requestSuccess, requestFail, userLogout} = userSlice.actions;
 
 export default userSlice.reducer;

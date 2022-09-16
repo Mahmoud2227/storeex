@@ -5,6 +5,7 @@ import Header from "./components/Header";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 
@@ -15,6 +16,7 @@ const App = () => {
 			<main className='container flex flex-col mx-auto min-h-[80vh] p-6'>
 				<Routes>
 					<Route path='/login' element={<Login />} />
+					<Route path='/register' element={<Register />} />
 					<Route path='/' element={<Home />} />
 					<Route path='/product/:id' element={<Product />} />
 					<Route path='/cart'>
