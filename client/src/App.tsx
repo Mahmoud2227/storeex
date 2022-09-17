@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Shipping from "./pages/Shipping";
+import Payment from "./pages/Payment";
 
 const App = () => {
 	return (
@@ -27,6 +28,7 @@ const App = () => {
 						<Route path=':id' element={<Cart />} />
 					</Route>
 					<Route path='/shipping' element={<Shipping />} />
+					<Route path='/payment' element={<Payment />} />
 				</Routes>
 			</main>
 			<Footer />
