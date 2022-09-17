@@ -18,10 +18,18 @@ interface ShippingAddress {
 	country: string;
 }
 
+interface OrderPrice {
+	itemsPrice: number;
+	shippingPrice: number;
+	taxPrice: number;
+	totalPrice: number;
+}
+
 interface CartState {
 	cartItems: Item[];
 	shippingAddress: ShippingAddress | null;
 	paymentMethod: string | null;
+	orderPrice: OrderPrice | null;
 }
 
 const localStorageCartItems = localStorage.getItem("cartItems")
@@ -41,6 +49,7 @@ const initialState: CartState = {
 	cartItems: localStorageCartItems,
 	shippingAddress: localStorageShippingAddress,
 	paymentMethod: localStoragePaymentMethod,
+	orderPrice: null,
 };
 
 export const cartSlice = createSlice({
@@ -65,6 +74,13 @@ export const cartSlice = createSlice({
 		},
 		savePayment: (state, action: PayloadAction<string>) => {
 			state.paymentMethod = action.payload;
+		},
+		calculatePrices: (state) => {
+			const itemsPrice = Number(state.cartItems.reduce((a, c) => a + c.price * c.qty, 0).toFixed(2));
+			const shippingPrice = itemsPrice > 100 ? 0 : 10;
+			const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
+			const totalPrice = Number((itemsPrice + shippingPrice + taxPrice).toFixed(2));
+			state.orderPrice = {itemsPrice, shippingPrice, taxPrice, totalPrice};
 		},
 	},
 });
@@ -111,6 +127,6 @@ export const savePaymentMethod = (data: string) => (dispatch: Dispatch) => {
 	localStorage.setItem("paymentMethod", JSON.stringify(data));
 };
 
-export const {addToCart, removeFromCart, saveAddress, savePayment} = cartSlice.actions;
+export const {addToCart, removeFromCart, saveAddress, savePayment,calculatePrices} = cartSlice.actions;
 
 export default cartSlice.reducer;

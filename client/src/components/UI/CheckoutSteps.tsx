@@ -8,7 +8,7 @@ const CheckoutSteps: FC<{
 	step4?: boolean;
 }> = ({step1, step2, step3, step4}) => {
 	return (
-		<ul className='flex justify-between items-center px-4 font-medium mb-8'>
+		<ul className='max-w-xl w-full mx-auto flex justify-between items-center px-4 font-medium mb-8'>
 			<li>
 				{step1 ? (
 					<Link to='/login' className='text-slate-500 hover:text-slate-900'>
