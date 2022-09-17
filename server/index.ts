@@ -6,6 +6,7 @@ import connectDB from "./config/db";
 import {notFound, errorHandler} from "./middleware/Error";
 import productRoutes from "./routes/product";
 import userRoutes from "./routes/user";
+import orderRoutes from "./routes/order";
 
 dotenv.config();
 connectDB();
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
