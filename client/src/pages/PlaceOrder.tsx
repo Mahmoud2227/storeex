@@ -1,20 +1,37 @@
 import {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import CheckoutSteps from "../components/UI/CheckoutSteps";
+import Message from "../components/UI/Message";
 import {useAppDispatch, useAppSelector} from "../hooks/RTK";
 import {calculatePrices} from "../store/slices/cart";
-
+import {createOrder} from "../store/slices/order";
 const PlaceOrder = () => {
 	const dispatch = useAppDispatch();
 	const cart = useAppSelector((state) => state.cart);
+	const {order, error, success} = useAppSelector((state) => state.order);
 
-	// Calculate prices
-	// cart.itemsPrice = cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
-
-	// dispatch(calculatePrices());
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		dispatch(calculatePrices());
-	}, [dispatch]);
+		if (success) {
+			navigate(`/order/${order?._id}`);
+		}
+	}, [dispatch, success, navigate, order]);
+
+	const placeOrderHandler = () => {
+		dispatch(
+			createOrder({
+				orderItems: cart.cartItems,
+				shippingAddress: cart.shippingAddress!,
+				paymentMethod: cart.paymentMethod!,
+				itemsPrice: cart.orderPrice?.totalPrice!,
+				shippingPrice: cart.orderPrice?.shippingPrice!,
+				taxPrice: cart.orderPrice?.taxPrice!,
+				totalPrice: cart.orderPrice?.totalPrice!,
+			})
+		);
+	};
 
 	return (
 		<>
@@ -71,9 +88,11 @@ const PlaceOrder = () => {
 							<p className='col-span-2'>${cart.orderPrice?.totalPrice}</p>
 						</li>
 					</ul>
+					{error && <Message color='red'>{error}</Message>}
 					<button
 						type='button'
-						className='block w-[calc(100%_-_32px)] mt-4 mx-auto p-4 bg-slate-700 text-white'>
+						className='block w-[calc(100%_-_32px)] mt-4 mx-auto p-4 bg-slate-700 text-white'
+						onClick={placeOrderHandler}>
 						PLACE ORDER
 					</button>
 				</div>

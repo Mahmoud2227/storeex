@@ -1,6 +1,7 @@
 import {createSlice, Dispatch} from "@reduxjs/toolkit";
 import type {PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../store";
+import {ShippingAddress} from "../../types/order";
 
 interface Item {
 	product: string;
@@ -9,13 +10,6 @@ interface Item {
 	price: number;
 	countInStock: number;
 	qty: number;
-}
-
-interface ShippingAddress {
-	address: string;
-	city: string;
-	postalCode: string;
-	country: string;
 }
 
 interface OrderPrice {
@@ -76,7 +70,9 @@ export const cartSlice = createSlice({
 			state.paymentMethod = action.payload;
 		},
 		calculatePrices: (state) => {
-			const itemsPrice = Number(state.cartItems.reduce((a, c) => a + c.price * c.qty, 0).toFixed(2));
+			const itemsPrice = Number(
+				state.cartItems.reduce((a, c) => a + c.price * c.qty, 0).toFixed(2)
+			);
 			const shippingPrice = itemsPrice > 100 ? 0 : 10;
 			const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
 			const totalPrice = Number((itemsPrice + shippingPrice + taxPrice).toFixed(2));
@@ -127,6 +123,7 @@ export const savePaymentMethod = (data: string) => (dispatch: Dispatch) => {
 	localStorage.setItem("paymentMethod", JSON.stringify(data));
 };
 
-export const {addToCart, removeFromCart, saveAddress, savePayment,calculatePrices} = cartSlice.actions;
+export const {addToCart, removeFromCart, saveAddress, savePayment, calculatePrices} =
+	cartSlice.actions;
 
 export default cartSlice.reducer;

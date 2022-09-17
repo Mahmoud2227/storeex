@@ -3,6 +3,7 @@ import productsReducer from "./slices/products";
 import productDetailsReducer from "./slices/productDetails";
 import cartReducer from "./slices/cart";
 import userReducer from "./slices/user/user";
+import orderReducer from "./slices/order";
 
 export const store = configureStore({
 	reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
 		productDetails: productDetailsReducer,
 		cart: cartReducer,
 		user: userReducer,
+		order: orderReducer,
 	},
 	devTools: process.env.NODE_ENV !== "production",
 });
