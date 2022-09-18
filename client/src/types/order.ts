@@ -13,13 +13,18 @@ type OrderItem = {
 	product: string;
 };
 
+type User = {
+	_id: string;
+	name: string;
+	email: string;
+};
+
 interface Order {
 	_id?: string;
-	user?: string;
+	user?: User;
 	orderItems: OrderItem[];
 	shippingAddress: ShippingAddress;
 	paymentMethod: string;
-	itemsPrice: number;
 	taxPrice: number;
 	shippingPrice: number;
 	totalPrice: number;

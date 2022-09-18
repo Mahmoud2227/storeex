@@ -4,6 +4,7 @@ import productDetailsReducer from "./slices/productDetails";
 import cartReducer from "./slices/cart";
 import userReducer from "./slices/user/user";
 import orderReducer from "./slices/order";
+import orderDetailsReducer from "./slices/orderDetails";
 
 export const store = configureStore({
 	reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
 		cart: cartReducer,
 		user: userReducer,
 		order: orderReducer,
+		orderDetails: orderDetailsReducer,
 	},
 	devTools: process.env.NODE_ENV !== "production",
 });

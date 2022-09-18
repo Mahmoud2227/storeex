@@ -15,7 +15,7 @@ const PlaceOrder = () => {
 	useEffect(() => {
 		dispatch(calculatePrices());
 		if (success) {
-			navigate(`/order/${order?._id}`);
+			navigate(`/orders/${order?._id}`);
 		}
 	}, [dispatch, success, navigate, order]);
 
@@ -25,7 +25,6 @@ const PlaceOrder = () => {
 				orderItems: cart.cartItems,
 				shippingAddress: cart.shippingAddress!,
 				paymentMethod: cart.paymentMethod!,
-				itemsPrice: cart.orderPrice?.totalPrice!,
 				shippingPrice: cart.orderPrice?.shippingPrice!,
 				taxPrice: cart.orderPrice?.taxPrice!,
 				totalPrice: cart.orderPrice?.totalPrice!,
