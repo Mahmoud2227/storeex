@@ -1,4 +1,4 @@
-import { Request } from "express";
+import {Request} from "express";
 import asyncHandler from "express-async-handler";
 import Order from "../models/Order";
 import IUser from "../types/User";
@@ -38,5 +38,16 @@ export const addOrderItems = asyncHandler(async (req: RequestWithUser, res) => {
 
 		const createdOrder = await order.save();
 		res.status(201).json(createdOrder);
+	}
+});
+
+export const getOrderById = asyncHandler(async (req: RequestWithUser, res) => {
+	const order = await Order.findById(req.params.id).populate("user", "name email");
+
+	if (order) {
+		res.json(order);
+	} else {
+		res.status(404);
+		throw new Error("Order not found");
 	}
 });
