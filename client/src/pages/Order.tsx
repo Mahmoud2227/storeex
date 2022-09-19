@@ -5,7 +5,7 @@ import Message from "../components/UI/Message";
 import Spinner from "../components/UI/Spinner";
 import {useAppDispatch, useAppSelector} from "../hooks/RTK";
 import {getOrderDetails} from "../store/slices/orderDetails";
-import {payOrder} from "../store/slices/orderPay";
+import {payOrder, orderPayReset} from "../store/slices/orderPay";
 
 const Order = () => {
 	const [clientId, setClientId] = useState("");
@@ -17,6 +17,10 @@ const Order = () => {
 	const {id} = useParams();
 
 	useEffect(() => {
+		dispatch(getOrderDetails(id || ""));
+	}, [dispatch, id]);
+
+	useEffect(() => {
 		const addPayPalScript = async () => {
 			const res = await fetch("/api/config/paypal");
 			const clientId = await res.text();
@@ -24,14 +28,13 @@ const Order = () => {
 			setClientId(clientId);
 		};
 
-		if (!order || successPay) {
+		if (successPay) {
 			dispatch(getOrderDetails(id || ""));
-		} else if (!order.isPaid) {
+			dispatch(orderPayReset());
+		} else if (!order?.isPaid) {
 			// @ts-ignore
 			if (!window.paypal) {
 				addPayPalScript();
-			} else {
-				
 			}
 		}
 	}, [dispatch, id, successPay, order]);

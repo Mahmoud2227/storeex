@@ -26,13 +26,18 @@ export const orderPaySlice = createSlice({
 			state.success = true;
 		},
 		orderPayFail: (state, action) => {
-			state.loading = false; 
+			state.loading = false;
 			state.error = action.payload;
+		},
+		orderPayReset: (state) => {
+			state.loading = false;
+			state.error = null;
+			state.success = false;
 		},
 	},
 });
 
-export const payOrder = (id: string,PaymentResult:unknown) => async (dispatch: Dispatch) => {
+export const payOrder = (id: string, PaymentResult: unknown) => async (dispatch: Dispatch) => {
 	try {
 		dispatch(orderPayRequest());
 
@@ -63,7 +68,7 @@ export const payOrder = (id: string,PaymentResult:unknown) => async (dispatch: D
 	}
 };
 
-export const {orderPayRequest, orderPaySuccess, orderPayFail} =
+export const {orderPayRequest, orderPaySuccess, orderPayFail, orderPayReset} =
 	orderPaySlice.actions;
 
 export default orderPaySlice.reducer;
