@@ -26,7 +26,7 @@ interface IOrder {
   shippingPrice: number;
   totalPrice: number;
   isPaid: boolean;
-  paidAt: Date;
+  paidAt: number | Date;
   isDelivered: boolean;
   deliveredAt: Date;
 }
