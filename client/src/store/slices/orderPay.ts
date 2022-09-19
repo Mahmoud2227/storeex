@@ -1,18 +1,16 @@
 import {createSlice, Dispatch} from "@reduxjs/toolkit";
-import type {PayloadAction} from "@reduxjs/toolkit";
-import Order from "../../types/order";
 
-interface OrderState {
+interface OrderPayState {
 	loading: boolean;
 	error: string | null;
-	order: Order | null;
+	success: boolean;
 }
 
 // Define the initial state using that type
-const initialState: OrderState = {
+const initialState: OrderPayState = {
 	loading: false,
 	error: null,
-	order: null,
+	success: false,
 };
 
 export const orderPaySlice = createSlice({
@@ -23,9 +21,9 @@ export const orderPaySlice = createSlice({
 		orderPayRequest: (state) => {
 			state.loading = true;
 		},
-		orderPaySuccess: (state, action: PayloadAction<Order>) => {
+		orderPaySuccess: (state) => {
 			state.loading = false;
-			state.order = action.payload;
+			state.success = true;
 		},
 		orderPayFail: (state, action) => {
 			state.loading = false; 
@@ -47,8 +45,8 @@ export const payOrder = (id: string,PaymentResult:unknown) => async (dispatch: D
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${token}`,
-
 			},
+			body: JSON.stringify(PaymentResult),
 		});
 
 		const data = await res.json();
@@ -57,7 +55,7 @@ export const payOrder = (id: string,PaymentResult:unknown) => async (dispatch: D
 			new Error(data.message);
 		}
 
-		dispatch(orderPaySuccess(data));
+		dispatch(orderPaySuccess());
 	} catch (error) {
 		if (error instanceof Error) {
 			dispatch(orderPayFail(error.message));

@@ -1,21 +1,40 @@
-import {useEffect} from "react";
-import {useNavigate, useParams} from "react-router-dom";
-import CheckoutSteps from "../components/UI/CheckoutSteps";
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+import {PayPalScriptProvider, PayPalButtons} from "@paypal/react-paypal-js";
 import Message from "../components/UI/Message";
 import Spinner from "../components/UI/Spinner";
 import {useAppDispatch, useAppSelector} from "../hooks/RTK";
 import {getOrderDetails} from "../store/slices/orderDetails";
+import {payOrder} from "../store/slices/orderPay";
 
 const Order = () => {
+	const [clientId, setClientId] = useState("");
+
 	const dispatch = useAppDispatch();
 	const {order, error, loading} = useAppSelector((state) => state.orderDetails);
+	const {success: successPay, loading: loadingPay} = useAppSelector((state) => state.orderPay);
 
 	const {id} = useParams();
-	const navigate = useNavigate();
 
 	useEffect(() => {
-		dispatch(getOrderDetails(id || ""));
-	}, [dispatch, id]);
+		const addPayPalScript = async () => {
+			const res = await fetch("/api/config/paypal");
+			const clientId = await res.text();
+			console.log(clientId);
+			setClientId(clientId);
+		};
+
+		if (!order || successPay) {
+			dispatch(getOrderDetails(id || ""));
+		} else if (!order.isPaid) {
+			// @ts-ignore
+			if (!window.paypal) {
+				addPayPalScript();
+			} else {
+				
+			}
+		}
+	}, [dispatch, id, successPay, order]);
 
 	return (
 		<>
@@ -99,6 +118,38 @@ const Order = () => {
 									<p className='col-span-2'>${order?.totalPrice}</p>
 								</li>
 							</ul>
+							{!order?.isPaid && (
+								<div className='m-8 mb-0'>
+									{loadingPay && <Spinner />}
+									{clientId ? (
+										<PayPalScriptProvider
+											options={{
+												"client-id": clientId,
+											}}>
+											<PayPalButtons
+												createOrder={(_data, actions) => {
+													return actions.order.create({
+														purchase_units: [
+															{
+																description: "Order",
+																amount: {
+																	value: order?.totalPrice.toString()!,
+																},
+															},
+														],
+													});
+												}}
+												onApprove={async (_data, actions) => {
+													const details = await actions.order?.capture();
+													dispatch(payOrder(id || "", details));
+												}}
+											/>
+										</PayPalScriptProvider>
+									) : (
+										<Spinner />
+									)}
+								</div>
+							)}
 						</div>
 					</div>
 				</>
