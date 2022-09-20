@@ -6,6 +6,7 @@ import userReducer from "./slices/user/user";
 import orderReducer from "./slices/order";
 import orderDetailsReducer from "./slices/orderDetails";
 import orderPayReducer from "./slices/orderPay";
+import orderListReducer from "./slices/ordersList";
 
 export const store = configureStore({
 	reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
 		order: orderReducer,
 		orderDetails: orderDetailsReducer,
 		orderPay: orderPayReducer,
+		ordersList: orderListReducer,
 	},
 	devTools: process.env.NODE_ENV !== "production",
 });

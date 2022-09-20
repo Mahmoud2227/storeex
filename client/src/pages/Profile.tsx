@@ -1,7 +1,9 @@
 import {useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {FaTimes} from "react-icons/fa";
 import {useAppDispatch, useAppSelector} from "../hooks/RTK";
 import {getUserDetails, updateProfile} from "../store/slices/user/actions";
+import {getOrdersList} from "../store/slices/ordersList";
 import Spinner from "../components/UI/Spinner";
 import Message from "../components/UI/Message";
 
@@ -24,6 +26,11 @@ const Profile = () => {
 
 	const dispatch = useAppDispatch();
 	const {loading, error, user} = useAppSelector((state) => state.user);
+	const {
+		loading: loadingOrders,
+		error: errorOrders,
+		orders,
+	} = useAppSelector((state) => state.ordersList);
 
 	const navigate = useNavigate();
 
@@ -31,6 +38,7 @@ const Profile = () => {
 		if (!user) {
 			navigate("/login");
 		} else {
+			dispatch(getOrdersList());
 			if (!user.name) {
 				dispatch(getUserDetails("profile"));
 			} else {
@@ -136,8 +144,54 @@ const Profile = () => {
 					</button>
 				</form>
 			</div>
-			<div>
+			<div className='w-full'>
 				<h1 className='text-3xl font-semibold tracking-wider'>MY ORDERS</h1>
+				{loadingOrders ? (
+					<Spinner />
+				) : errorOrders ? (
+					<Message color='red'>{errorOrders}</Message>
+				) : (
+					<table className='w-full mt-4'>
+						<thead>
+							<tr className='text-left'>
+								<th className='p-2 border-2'>ID</th>
+								<th className='p-2 border-2'>DATE</th>
+								<th className='p-2 border-2'>TOTAL</th>
+								<th className='p-2 border-2'>PAID</th>
+								<th className='p-2 border-2'>DELIVERED</th>
+								<th className='p-2 border-2'>ACTIONS</th>
+							</tr>
+						</thead>
+						<tbody className='bg-slate-100'>
+							{orders?.map((order) => (
+								<tr key={order._id}>
+									<td className='p-2 border-2'>{order._id}</td>
+									<td className='p-2 border-2'>{order.createdAt?.substring(0, 10)}</td>
+									<td className='p-2 border-2'>${order.totalPrice}</td>
+									<td className='p-2 border-2'>
+										{order.isPaid ? (
+											order.paidAt?.substring(0, 10)
+										) : (
+											<FaTimes color='red' className='text-2xl mx-auto' />
+										)}
+									</td>
+									<td className='p-2 border-2'>
+										{order.isDelivered ? (
+											order.deliveredAt?.substring(0, 10)
+										) : (
+											<FaTimes color='red' className='text-2xl mx-auto' />
+										)}
+									</td>
+									<td className='p-2 border-2'>
+										<Link to={`/orders/${order._id}`}>
+											<button className='w-full py-1 px-3 bg-slate-700 text-white'>Details</button>
+										</Link>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				)}
 			</div>
 		</div>
 	);
