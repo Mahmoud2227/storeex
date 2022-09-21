@@ -1,13 +1,18 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-const DropDown: React.FC<{name: string; Logout: () => void}> = ({name, Logout}) => {
+type DropDownItems = {
+	name: string;
+	link: string;
+	func?: () => void;
+};
+
+const DropDown: React.FC<{dropDownItems: DropDownItems[]; title: string}> = ({
+	dropDownItems,
+	title,
+}) => {
 	const [open, setOpen] = React.useState<boolean>(false);
 
-	const logoutHandler = () => {
-		Logout();
-		setOpen(false);
-	};
 	return (
 		<>
 			<span
@@ -18,15 +23,22 @@ const DropDown: React.FC<{name: string; Logout: () => void}> = ({name, Logout}) 
 						: "after:border-t-slate-400 text-slate-400"
 				}`}
 				onClick={() => setOpen(!open)}>
-				{name}
+				{title}
 				{open && (
-					<ul className='absolute -bottom-20 left-0 w-[120%] text-black bg-white border-2 shadow-md'>
-						<Link to='/profile' onClick={() => setOpen(false)}>
-							<li className='p-2 hover:bg-slate-100'>Profile</li>
-						</Link>
-						<Link to='/' onClick={logoutHandler}>
-							<li className='p-2 hover:bg-slate-100'>Logout</li>
-						</Link>
+					<ul className='absolute top-7 left-0 w-[120%] min-w-[90px] text-black bg-white border-2 shadow-md'>
+						{dropDownItems.map((item) => (
+							<Link
+								to={item.link}
+								key={item.name}
+								onClick={() => {
+									if (item.func) {
+										item.func();
+									}
+									setOpen(false);
+								}}>
+								<li className='p-2 hover:bg-slate-100'>{item.name}</li>
+							</Link>
+						))}
 					</ul>
 				)}
 			</span>

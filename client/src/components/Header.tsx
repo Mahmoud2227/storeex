@@ -13,6 +13,33 @@ const Header = () => {
 		dispatch(logout());
 	};
 
+	const userDropDownItems = [
+		{
+			name: "Profile",
+			link: "/profile",
+		},
+		{
+			name: "Logout",
+			link: "/",
+			func: logoutHandler,
+		},
+	];
+
+	const adminDropDownItems = [
+		{
+			name: "Users",
+			link: "/admin/users",
+		},
+		{
+			name: "Products",
+			link: "/admin/products",
+		},
+		{
+			name: "Orders",
+			link: "/admin/orders",
+		},
+	];
+
 	return (
 		<header className='w-full p-6 bg-slate-800'>
 			<nav className='container mx-auto flex justify-between items-center'>
@@ -28,7 +55,7 @@ const Header = () => {
 					</li>
 					<li className='hover:text-slate-100 flex'>
 						{user ? (
-							<DropDown name={user.name} Logout={logoutHandler} />
+							<DropDown title={user.name} dropDownItems={userDropDownItems} />
 						) : (
 							<Link to='/login' className='flex gap-1 items-center'>
 								<HiUser />
@@ -36,6 +63,11 @@ const Header = () => {
 							</Link>
 						)}
 					</li>
+					{user && user.isAdmin && (
+						<li className='hover:text-slate-100'>
+							<DropDown title='Admin' dropDownItems={adminDropDownItems} />
+						</li>
+					)}
 				</ul>
 			</nav>
 		</header>
